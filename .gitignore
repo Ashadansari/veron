@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/src/generated/prisma/
 /.pnp
 .pnp.*
 .yarn/*
@@ -15,10 +16,15 @@
 
 # next.js
 /.next/
+/.next-*/
 /out/
 
 # production
 /build
+
+# Local/staging product uploads are runtime data, not source assets.
+/public/uploads/products/*
+!/public/uploads/products/.gitkeep
 
 # misc
 .DS_Store
@@ -32,6 +38,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel

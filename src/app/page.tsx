@@ -1,69 +1,111 @@
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowIcon } from "@/components/storefront/icons";
+import { ProductCard } from "@/components/storefront/product-card";
+import { SiteFooter } from "@/components/storefront/site-footer";
+import { SiteHeader } from "@/components/storefront/site-header";
+import { getCatalogCategories, getCatalogProducts } from "@/lib/catalog/repository";
 
-export default function Home() {
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const [categories, products] = await Promise.all([getCatalogCategories(), getCatalogProducts()]);
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+    <>
+      <SiteHeader />
+      <main id="top">
+        <section className="hero" aria-labelledby="hero-title">
+          <Image
+            className="hero-image"
+            src="https://images.unsplash.com/photo-1668371679302-a8ec781e876e?auto=format&fit=crop&w=2200&q=90"
+            alt="A model wearing a richly detailed red festive outfit"
+            fill
+            priority
+            unoptimized
+            sizes="100vw"
+          />
+          <div className="hero-overlay" />
+          <div className="hero-content">
+            <span className="hero-kicker"><span /> A LITTLE MORE YOU</span>
+            <h1 id="hero-title">Made for your<br />kind of <em>everyday.</em></h1>
+            <p>Easy, expressive clothing for every version of you.</p>
+            <a className="button button-light" href="#shop">Find your favourite <ArrowIcon className="h-4 w-4" /></a>
+          </div>
+          <span className="hero-index">01 <span /> 04</span>
+          <span className="hero-side-note">THE NEW SEASON, YOUR WAY</span>
+        </section>
+
+        <section className="benefit-strip" aria-label="Shopping benefits">
+          <p><span>✳</span> Delivery settings shown at checkout</p>
+          <i />
+          <p><span>✳</span> Cash on Delivery where available</p>
+          <i />
+          <p><span>✳</span> Prices shown in NPR</p>
+        </section>
+
+        <section className="section-shell categories-section" id="categories">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">A GOOD PLACE TO START</p>
+              <h2>What are you in the mood for?</h2>
+            </div>
+            <Link className="text-link" href="/shop">See everything <ArrowIcon className="h-4 w-4" /></Link>
+          </div>
+          <div className="category-grid">
+            {categories.slice(0, 4).map((category, index) => (
+              <Link className={"category-tile category-tile-" + (index + 1)} href={`/shop?category=${encodeURIComponent(category.name)}`} key={category.name}>
+                <span className="category-index">0{index + 1}</span>
+                <span className="category-copy">
+                  <span className="category-title">{category.name}</span>
+                  <span className="category-count">{category.description || "Explore the collection"}</span>
+                </span>
+                <span className="category-arrow"><ArrowIcon className="h-4 w-4" /></span>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <section className="section-shell products-section" id="shop">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">YOUR NEXT LOVE, MAYBE?</p>
+              <h2>Good things, just in</h2>
+            </div>
+            <Link className="text-link" href="/shop">Shop the collection <ArrowIcon className="h-4 w-4" /></Link>
+          </div>
+          <div className="product-grid">{products.slice(0, 4).map((product) => <ProductCard product={product} key={product.id} />)}</div>
+        </section>
+
+        <section className="story-panel" id="story">
+          <div className="story-ornament" aria-hidden="true">✳</div>
+          <div className="story-copy">
+            <p className="eyebrow">NOT JUST FOR THE BIG DAYS</p>
+            <h2>Wear what feels<br /><em>like you.</em></h2>
+            <p>Some days call for a little extra. Some days call for your favourite kurta and nowhere to be. We make room for all of them.</p>
+          <Link className="button button-dark" href="/shop">Explore the store <ArrowIcon className="h-4 w-4" /></Link>
+          </div>
+          <div className="story-image-wrap">
             <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+              src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1100&q=85"
+              alt="Softly layered fabric in warm rose and earth tones"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="story-image"
+              unoptimized
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+            <span className="story-caption">DRESS LIKE YOU MEAN IT</span>
+          </div>
+        </section>
+
+        <section className="newsletter-section">
+          <span className="newsletter-spark">✳</span>
+          <p className="eyebrow">LETTERS FROM US</p>
+          <h2>Good things in your inbox.</h2>
+          <p>Store updates are coming soon.</p>
+          <Link className="text-link" href="/account">Account features are coming soon <ArrowIcon className="h-4 w-4" /></Link>
+        </section>
       </main>
-    </div>
+      <SiteFooter />
+    </>
   );
 }

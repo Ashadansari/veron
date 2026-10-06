@@ -2,25 +2,70 @@
   "name": "najfancystore",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=24.0.0 <25"
+  },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "next dev --webpack",
+    "predev": "node --import tsx scripts/validate-public-env.ts && prisma generate",
+    "build": "next build --webpack",
+    "prebuild": "node --import tsx scripts/validate-public-env.ts && prisma generate",
     "start": "next start",
-    "lint": "eslint"
+    "prestart": "node --import tsx scripts/validate-public-env.ts && node --import tsx scripts/validate-production-env.ts",
+    "env:validate:production": "node --import tsx scripts/validate-production-env.ts",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit --incremental false",
+    "test": "node scripts/run-tests.mjs",
+    "create-admin": "node --import tsx scripts/create-admin.ts",
+    "db:generate": "prisma generate",
+    "db:validate": "prisma validate",
+    "db:format": "prisma format",
+    "db:migrate": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:seed": "prisma db seed",
+    "db:drizzle:generate": "drizzle-kit generate",
+    "db:drizzle:migrate": "drizzle-kit migrate",
+    "admin:promote": "node --env-file=.env.local scripts/promote-admin.mjs"
   },
   "dependencies": {
+    "@better-auth/drizzle-adapter": "^1.7.5",
+    "@prisma/adapter-pg": "^7.10.0",
+    "@prisma/client": "^7.10.0",
+    "better-auth": "^1.7.5",
+    "dotenv": "^18.0.3",
+    "drizzle-orm": "^0.45.3",
     "next": "16.3.6",
+    "pg": "^8.23.0",
+    "postgres": "^3.4.9",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "drizzle-kit": "^0.31.11",
     "eslint": "^9",
     "eslint-config-next": "16.3.6",
+    "prisma": "^7.10.0",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5"
+  },
+  "overrides": {
+    "mysql2": "3.24.4",
+    "deepmerge-ts": "^8.0.0",
+    "@esbuild-kit/core-utils": {
+      "esbuild": "^0.25.4"
+    }
+  },
+  "allowScripts": {
+    "esbuild@0.25.12": true,
+    "esbuild@0.28.2": true,
+    "prisma@7.10.0": true,
+    "@prisma/engines@7.10.0": true,
+    "unrs-resolver@1.12.2": true
   }
 }
