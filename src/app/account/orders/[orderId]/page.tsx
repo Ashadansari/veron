@@ -6,7 +6,7 @@ import { formatPaisa } from "@/lib/commerce/money";
 import { getCurrentSession } from "@/lib/authz";
 import { CancelOrderButton } from "@/components/account/cancel-order-button";
 
-export const metadata: Metadata = { title: "Order details | NajFancyStore" };
+export const metadata: Metadata = { title: "Order details | VÉRON" };
 export const dynamic = "force-dynamic";
 
 export default async function AccountOrderDetailPage({ params }: { params: Promise<{ orderId: string }> }) {

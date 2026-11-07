@@ -4,7 +4,7 @@ import { getCustomerOrders } from "@/lib/commerce/customer-queries";
 import { formatPaisa } from "@/lib/commerce/money";
 import { getCurrentSession } from "@/lib/authz";
 
-export const metadata: Metadata = { title: "Your orders | NajFancyStore" };
+export const metadata: Metadata = { title: "Your orders | VÉRON" };
 export const dynamic = "force-dynamic";
 
 export default async function AccountOrdersPage() {

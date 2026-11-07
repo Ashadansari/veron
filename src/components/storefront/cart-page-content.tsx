@@ -7,12 +7,12 @@ import { clearCustomerCart, setCartQuantity as saveCartQuantity } from "@/app/ac
 import { useState } from "react";
 
 export default function CartPageContent() {
-  const { items, isLoaded, loadError, subtotalPaisa, setQuantity, removeItem, clearCart } = useCart();
+  const { items, isLoaded, loadError, subtotalPaisa, refreshCustomerCart } = useCart();
   const [busy, setBusy] = useState(false);
   const [actionError, setActionError] = useState("");
   async function updateQuantity(variantId: string, quantity: number) {
     setBusy(true); setActionError("");
-    try { await saveCartQuantity({ variantId, quantity }); if (quantity === 0) removeItem(variantId); else setQuantity(variantId, quantity); }
+    try { await saveCartQuantity({ variantId, quantity }); await refreshCustomerCart(); }
     catch (error) { setActionError(error instanceof Error ? error.message : "Could not update your cart."); }
     finally { setBusy(false); }
   }
@@ -28,7 +28,7 @@ export default function CartPageContent() {
         </div>
         <strong className="cart-line-total">{formatNpr((BigInt(variant.pricePaisa) * BigInt(quantity)).toString())}</strong>
       </article>)}</section>
-      <aside className="cart-summary"><h2>Summary</h2><div><span>Subtotal</span><strong>{formatNpr(subtotalPaisa.toString())}</strong></div><div><span>Delivery</span><span>Shown at checkout</span></div><p>Delivery charges depend on the configured shipping options.</p>{actionError && <p className="form-error" role="alert">{actionError}</p>}<Link className="button button-dark" href="/checkout">Continue to checkout</Link><button className="text-button" type="button" disabled={busy} onClick={async () => { setBusy(true); setActionError(""); try { await clearCustomerCart(); clearCart(); } catch { setActionError("Could not clear your saved cart."); } finally { setBusy(false); } }}>Clear bag</button></aside>
+      <aside className="cart-summary"><h2>Summary</h2><div><span>Subtotal</span><strong>{formatNpr(subtotalPaisa.toString())}</strong></div><div><span>Delivery</span><span>Shown at checkout</span></div><p>Delivery charges depend on the configured shipping options.</p>{actionError && <p className="form-error" role="alert">{actionError}</p>}<Link className="button button-dark" href="/checkout">Continue to checkout</Link><button className="text-button" type="button" disabled={busy} onClick={async () => { setBusy(true); setActionError(""); try { await clearCustomerCart(); await refreshCustomerCart(); } catch { setActionError("Could not clear your saved cart."); } finally { setBusy(false); } }}>Clear bag</button></aside>
     </div>}
   </main>;
 }

@@ -3,7 +3,7 @@ import { AddressForm, DeleteAddressButton } from "@/components/account-actions";
 import { getCustomerAddresses } from "@/lib/commerce/customer-queries";
 import { getCurrentSession } from "@/lib/authz";
 
-export const metadata: Metadata = { title: "Your addresses | NajFancyStore" };
+export const metadata: Metadata = { title: "Your addresses | VÉRON" };
 export const dynamic = "force-dynamic";
 
 export default async function AccountAddressesPage() {

@@ -4,7 +4,7 @@ import { StorefrontFrame } from "@/components/storefront/storefront-frame";
 import { CheckoutReview } from "@/components/storefront/checkout-review";
 import { getCurrentSession } from "@/lib/authz";
 import { getCheckoutReview } from "@/lib/commerce/customer-queries";
-export const metadata: Metadata = { title: "Checkout | NajFancyStore" };
+export const metadata: Metadata = { title: "Checkout | VÉRON" };
 export const dynamic = "force-dynamic";
 export default async function CheckoutPage() {
   const current = await getCurrentSession();

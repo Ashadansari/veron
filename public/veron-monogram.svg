@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+  <title id="title">VÉRON hanger V monogram</title>
+  <g fill="none" stroke="#D8AD65" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M58 22c0-12 17-14 17-3 0 7-7 9-7 15v7" stroke-width="4"/>
+    <path d="M68 44 15 79h106L68 44Z" stroke-width="4"/>
+    <path d="m27 74 41 34 41-34" stroke="#650B20" stroke-width="3"/>
+  </g>
+</svg>

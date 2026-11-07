@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 export default async function AdminSettingsPage() {
   const [saved] = await getDatabase().select().from(storeSettings).limit(1);
   const settings = saved ?? {
-    storeName: "Naj Fancy Store", contactEmail: null, contactPhone: null,
+    storeName: "VÉRON", contactEmail: null, contactPhone: null,
     shippingChargePaisa: 0n, freeShippingThresholdPaisa: null, codEnabled: true, storeActive: true,
   };
   return <div className="admin-content">

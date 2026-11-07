@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ProfileForm } from "@/components/account-actions";
 import { getCurrentSession } from "@/lib/authz";
 
-export const metadata: Metadata = { title: "Profile | NajFancyStore" };
+export const metadata: Metadata = { title: "Profile | VÉRON" };
 export const dynamic = "force-dynamic";
 
 export default async function AccountProfilePage() {

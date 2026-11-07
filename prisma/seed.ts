@@ -18,7 +18,7 @@ async function seed() {
   await prisma.storeSettings.upsert({
     where: { id: 1 },
     update: {},
-    create: { id: 1, storeName: "Naj Fancy Store", currency: "NPR", locale: "ne-NP", timeZone: "Asia/Kathmandu" },
+    create: { id: 1, storeName: "VÉRON", currency: "NPR", locale: "ne-NP", timeZone: "Asia/Kathmandu" },
   });
 
   const categoryByName = new Map<string, string>();

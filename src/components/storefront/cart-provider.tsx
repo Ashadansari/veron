@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useMemo, useState, type ReactNode
 import type { CatalogProduct, ProductVariant } from "@/lib/catalog/types";
 import { authClient } from "@/lib/auth-client";
 import { getCartStorageKey } from "@/components/storefront/cart-storage";
+import { getAuthenticatedCustomerCart } from "@/app/actions/customer";
 
 const LEGACY_CART_STORAGE_KEY = "najfancy.cart.v1";
 
@@ -24,11 +25,7 @@ type CartContextValue = {
   loadError: string;
   itemCount: number;
   subtotalPaisa: bigint;
-  addItem: (product: CatalogProduct, variant: ProductVariant, quantity?: number) => { ok: boolean; message: string };
-  setValidatedItem: (product: CatalogProduct, variant: ProductVariant, quantity: number) => void;
-  setQuantity: (variantId: string, quantity: number) => void;
-  removeItem: (variantId: string) => void;
-  clearCart: () => void;
+  refreshCustomerCart: () => Promise<void>;
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -102,6 +99,30 @@ export function CartProvider({ children }: { children: ReactNode }) {
       setIsLoaded(false);
       setLoadError("");
 
+      if (userId) {
+        try {
+          // Customer localStorage is never read as cart input. Discard old snapshots so they cannot
+          // resurrect rows that have already been removed from the database cart.
+          window.localStorage.removeItem(LEGACY_CART_STORAGE_KEY);
+          window.localStorage.removeItem(storageKey);
+        } catch { /* Storage can be unavailable in restricted browsers. */ }
+        void getAuthenticatedCustomerCart().then((snapshot) => {
+          if (!active) return;
+          setStoredItems(snapshot.items as CartLine[]);
+          setCanPersist(false);
+        }).catch(() => {
+          if (active) {
+            setStoredItems([]);
+            setLoadError("Your saved bag could not be loaded from your account. Reload when the store is available.");
+          }
+        }).finally(() => {
+          if (!active) return;
+          setLoadedStorageKey(storageKey);
+          setIsLoaded(true);
+        });
+        return;
+      }
+
       let stored: string | null = null;
       try {
         // Drop the old origin-wide snapshot. It was shared between guests and every signed-in customer.
@@ -130,14 +151,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
       });
     });
     return () => { active = false; window.cancelAnimationFrame(frame); };
-  }, [storageKey]);
+  }, [storageKey, userId]);
 
   useEffect(() => {
-    if (!storageKey || loadedStorageKey !== storageKey || !isLoaded || !canPersist) return;
+    if (userId || !storageKey || loadedStorageKey !== storageKey || !isLoaded || !canPersist) return;
     try { window.localStorage.setItem(storageKey, JSON.stringify(serializeCart(items))); } catch { /* Keep the in-memory cart usable if storage is full or disabled. */ }
-  }, [items, isLoaded, canPersist, loadedStorageKey, storageKey]);
+  }, [items, isLoaded, canPersist, loadedStorageKey, storageKey, userId]);
 
   useEffect(() => {
+    if (userId) return;
     function onStorage(event: StorageEvent) {
       if (event.key === storageKey) void restoreCart(event.newValue).then((restored) => {
         setStoredItems(restored);
@@ -147,7 +169,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
     window.addEventListener("storage", onStorage);
     return () => window.removeEventListener("storage", onStorage);
-  }, [storageKey]);
+  }, [storageKey, userId]);
 
   const value = useMemo<CartContextValue>(() => ({
     items,
@@ -155,34 +177,22 @@ export function CartProvider({ children }: { children: ReactNode }) {
     loadError,
     itemCount: items.reduce((count, item) => count + item.quantity, 0),
     subtotalPaisa: items.reduce((sum, item) => sum + BigInt(item.variant.pricePaisa) * BigInt(item.quantity), 0n),
-    addItem(product, variant, quantity = 1) {
-      if (!userId) return { ok: false, message: "Sign in to add items to your bag." };
-      const existing = items.find((item) => item.variantId === variant.id);
-      if (!Number.isInteger(quantity) || quantity < 1) return { ok: false, message: "Choose at least one item." };
-      const nextQuantity = (existing?.quantity ?? 0) + quantity;
-      if (nextQuantity > variant.stock) return { ok: false, message: "Only " + variant.stock + " are available for this option." };
-      setCanPersist(true);
-      setStoredItems(existing
-        ? items.map((item) => item.variantId === variant.id ? { ...item, quantity: nextQuantity, product, variant } : item)
-        : [...items, { productId: product.id, variantId: variant.id, quantity, product, variant }]);
-      return { ok: true, message: "Added to your bag." };
-    },
-    setValidatedItem(product, variant, quantity) {
+    async refreshCustomerCart() {
       if (!userId) return;
-      setCanPersist(true);
-      setStoredItems((current) => current.some((item) => item.variantId === variant.id)
-        ? current.map((item) => item.variantId === variant.id ? { ...item, product, variant, quantity } : item)
-        : [...current, { productId: product.id, variantId: variant.id, quantity, product, variant }]);
+      try {
+        const snapshot = await getAuthenticatedCustomerCart();
+        setStoredItems(snapshot.items as CartLine[]);
+        setCanPersist(false);
+        setLoadError("");
+        if (storageKey) setLoadedStorageKey(storageKey);
+        setIsLoaded(true);
+      } catch (error) {
+        // Never leave an old client snapshot displayed as if it were current after a failed refresh.
+        setStoredItems([]);
+        setLoadError("Your saved bag could not be refreshed from your account. Reload when the store is available.");
+        throw error;
+      }
     },
-    setQuantity(variantId, quantity) {
-      if (quantity < 1) return;
-      setCanPersist(true);
-      setStoredItems(items.map((item) => item.variantId === variantId
-        ? { ...item, quantity: Math.min(quantity, item.variant.stock) }
-        : item));
-    },
-    removeItem(variantId) { setCanPersist(true); setStoredItems(items.filter((item) => item.variantId !== variantId)); },
-    clearCart() { setCanPersist(true); setStoredItems([]); },
   }), [items, isLoaded, loadedStorageKey, loadError, storageKey, userId]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

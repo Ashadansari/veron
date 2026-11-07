@@ -1,6 +1,6 @@
 # Nepal payment provider research — 24 September 2026
 
-This is an integration-planning note, not a claim that NajFancyStore has a merchant account or production credentials.
+This is an integration-planning note, not a claim that VÉRON has a merchant account or production credentials.
 
 | Provider | Documented web checkout flow | Server verification | Practical notes |
 | --- | --- | --- | --- |

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { DeleteAccountForm, PasswordForm } from "@/components/account-actions";
 
-export const metadata: Metadata = { title: "Account settings | NajFancyStore" };
+export const metadata: Metadata = { title: "Account settings | VÉRON" };
 
 export default function AccountSettingsPage() {
   return <main className="grid max-w-4xl gap-10">

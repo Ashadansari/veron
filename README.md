@@ -1,4 +1,4 @@
-# NajFancyStore
+# VÉRON
 
 Production-oriented clothing storefront for Nepal, built with Next.js App Router, React, TypeScript, Tailwind CSS, ESLint, PostgreSQL, Prisma ORM, Drizzle ORM, and Better Auth.
 

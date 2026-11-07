@@ -10,6 +10,12 @@ import { getAuth } from "@/lib/auth";
 import { customerPasswordSchema } from "@/lib/auth-validation";
 import { requireCustomer } from "@/lib/authz";
 import { anonymizeCustomerAccount, deleteCustomerAddress, saveCustomerAddress, saveCustomerProfile } from "@/lib/account-service";
+import { getCustomerCartSnapshot } from "@/lib/commerce/customer-queries";
+
+export async function getAuthenticatedCustomerCart() {
+  const customer = await requireCustomer();
+  return getCustomerCartSnapshot(customer.userId);
+}
 
 export async function saveAddress(formData: FormData) {
   const customer = await requireCustomer();

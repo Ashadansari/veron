@@ -306,7 +306,7 @@ export const shippingRules = pgTable(
 
 export const storeSettings = pgTable("store_settings", {
   id: integer("id").primaryKey().default(1),
-  storeName: varchar("store_name", { length: 120 }).notNull().default("Naj Fancy Store"),
+  storeName: varchar("store_name", { length: 120 }).notNull().default("VÉRON"),
   currency: varchar("currency", { length: 3 }).notNull().default("NPR"),
   locale: varchar("locale", { length: 12 }).notNull().default("ne-NP"),
   timeZone: varchar("time_zone", { length: 40 }).notNull().default("Asia/Kathmandu"),

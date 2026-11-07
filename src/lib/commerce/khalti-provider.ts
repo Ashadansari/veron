@@ -54,7 +54,7 @@ export class KhaltiPaymentProvider implements PaymentProvider {
         website_url: request.websiteUrl,
         amount: Number(request.amountPaisa),
         purchase_order_id: request.orderNumber,
-        purchase_order_name: `NajFancyStore ${request.orderNumber}`,
+        purchase_order_name: `VÉRON ${request.orderNumber}`,
       }),
       cache: "no-store",
       signal: AbortSignal.timeout(15_000),

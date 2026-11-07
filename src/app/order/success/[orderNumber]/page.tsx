@@ -6,7 +6,7 @@ import { formatPaisa } from "@/lib/commerce/money";
 import { getCustomerOrderByNumber } from "@/lib/commerce/customer-queries";
 import { getCurrentSession } from "@/lib/authz";
 
-export const metadata: Metadata = { title: "Order confirmed | NajFancyStore" };
+export const metadata: Metadata = { title: "Order confirmed | VÉRON" };
 export const dynamic = "force-dynamic";
 
 export default async function OrderSuccessPage({ params }: { params: Promise<{ orderNumber: string }> }) {

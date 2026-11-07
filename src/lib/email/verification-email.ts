@@ -31,7 +31,7 @@ export function isVerificationEmailDeliveryConfigured(environment: Record<string
 }
 
 export async function sendVerificationEmail(message: VerificationMessage): Promise<void> {
-  const subject = "Verify your Naj Fancy Store email";
+  const subject = "Verify your VÉRON email";
   if (process.env.NODE_ENV === "test") {
     testMessages.push({ ...message, subject });
     return;

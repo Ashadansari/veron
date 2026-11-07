@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useCart } from "@/components/storefront/cart-provider";
+import { BrandLogo } from "@/components/brand-logo";
 import { BagIcon, SearchIcon } from "./icons";
 
 export function SiteHeader() {
@@ -15,9 +16,7 @@ export function SiteHeader() {
       <div className="announcement-bar">Delivery across Nepal <span aria-hidden="true">✦</span> Cash on Delivery where available</div>
       <header className="site-header">
         <div className="header-inner">
-          <Link className="brand-mark" href="/" aria-label="Naj Fancy Store home" onClick={closeMenu}>
-            <span className="brand-name">naj<span>fancy</span></span><span className="brand-caption">CLOTHING FOR NEPAL</span>
-          </Link>
+          <BrandLogo className="site-brand-logo" onClick={closeMenu} />
           <nav id="main-navigation" className={"desktop-nav" + (menuOpen ? " is-open" : "")} aria-label="Main navigation">
             <Link href="/" onClick={closeMenu}>Home</Link>
             <Link href="/shop" onClick={closeMenu}>Shop</Link>

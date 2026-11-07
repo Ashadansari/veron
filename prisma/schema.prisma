@@ -384,7 +384,7 @@ model Payment {
 
 model StoreSettings {
   id                         Int      @id @default(1)
-  storeName                  String   @default("Naj Fancy Store") @map("store_name") @db.VarChar(120)
+  storeName                  String   @default("VÉRON") @map("store_name") @db.VarChar(120)
   currency                   String   @default("NPR") @db.VarChar(3)
   locale                     String   @default("ne-NP") @db.VarChar(12)
   timeZone                   String   @default("Asia/Kathmandu") @map("time_zone") @db.VarChar(40)

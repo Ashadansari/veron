@@ -3,7 +3,7 @@ import "server-only";
 import { z } from "zod";
 import { and, asc, desc, eq, inArray, ne, sql } from "drizzle-orm";
 import { getDatabase } from "@/db";
-import { addresses, cartItems, carts, colors, inventory, orderItems, orders, productVariants, products, sizes, storeSettings } from "@/db/schema";
+import { addresses, cartItems, carts, categories, colors, inventory, orderItems, orders, productImages, productVariants, products, sizes, storeSettings } from "@/db/schema";
 import { quoteShipping } from "@/lib/commerce/shipping";
 import { isKhaltiPaymentConfigured } from "@/lib/commerce/khalti-provider";
 
@@ -60,6 +60,72 @@ export async function getCustomerCart(userId: string) {
     .leftJoin(sizes, eq(sizes.id, productVariants.sizeId)).leftJoin(colors, eq(colors.id, productVariants.colorId))
     .where(eq(cartItems.cartId, cart.id));
   return { items, subtotalPaisa: items.reduce((sum, item) => sum + (item.salePricePaisa ?? item.pricePaisa) * BigInt(item.quantity), 0n) };
+}
+
+/** Canonical, client-safe storefront representation of the authenticated customer's database cart. */
+export async function getCustomerCartSnapshot(userId: string) {
+  const db = getDatabase();
+  const [cart] = await db.select({ id: carts.id }).from(carts).where(eq(carts.userId, userId)).limit(1);
+  if (!cart) return { items: [], subtotalPaisa: "0" };
+  const rows = await db.select({
+    productId: products.id, productSlug: products.slug, productName: products.name,
+    productDescription: products.description, productActive: products.active,
+    categoryName: categories.name, productCreatedAt: products.createdAt,
+    variantId: productVariants.id, sku: productVariants.sku,
+    variantActive: productVariants.active, regularPricePaisa: productVariants.pricePaisa,
+    salePricePaisa: productVariants.salePricePaisa, size: sizes.label, color: colors.name,
+    quantity: cartItems.quantity, onHand: inventory.onHand, reserved: inventory.reserved,
+  }).from(cartItems)
+    .innerJoin(productVariants, eq(productVariants.id, cartItems.variantId))
+    .innerJoin(products, eq(products.id, productVariants.productId))
+    .innerJoin(inventory, eq(inventory.variantId, productVariants.id))
+    .leftJoin(categories, eq(categories.id, products.categoryId))
+    .leftJoin(sizes, eq(sizes.id, productVariants.sizeId))
+    .leftJoin(colors, eq(colors.id, productVariants.colorId))
+    .where(eq(cartItems.cartId, cart.id));
+  if (!rows.length) return { items: [], subtotalPaisa: "0" };
+
+  const images = await db.select().from(productImages)
+    .where(inArray(productImages.productId, [...new Set(rows.map((row) => row.productId))]))
+    .orderBy(desc(productImages.isPrimary), asc(productImages.sortOrder));
+  const imagesByProduct = new Map<string, { src: string; alt: string }[]>();
+  for (const image of images) {
+    const productImagesForRow = imagesByProduct.get(image.productId) ?? [];
+    productImagesForRow.push({ src: image.url, alt: image.altText });
+    imagesByProduct.set(image.productId, productImagesForRow);
+  }
+
+  const items = rows.map((row) => {
+    const pricePaisa = row.salePricePaisa ?? row.regularPricePaisa;
+    const variant = {
+      id: row.variantId,
+      sku: row.sku,
+      size: row.size ?? "One size",
+      color: row.color ?? "Default",
+      pricePaisa: pricePaisa.toString(),
+      ...(row.salePricePaisa !== null ? { originalPricePaisa: row.regularPricePaisa.toString() } : {}),
+      stock: row.productActive && row.variantActive ? Math.max(0, row.onHand - row.reserved) : 0,
+    };
+    return {
+      productId: row.productId,
+      variantId: row.variantId,
+      quantity: row.quantity,
+      product: {
+        id: row.productId,
+        slug: row.productSlug,
+        name: row.productName,
+        category: row.categoryName ?? "Collection",
+        description: row.productDescription,
+        images: imagesByProduct.get(row.productId) ?? [],
+        variants: [variant],
+        createdAt: row.productCreatedAt.getTime(),
+        imageTone: "#e8e0d4",
+      },
+      variant,
+    };
+  });
+  const subtotalPaisa = rows.reduce((sum, row) => sum + (row.salePricePaisa ?? row.regularPricePaisa) * BigInt(row.quantity), 0n);
+  return { items, subtotalPaisa: subtotalPaisa.toString() };
 }
 
 export async function getCheckoutReview(userId: string) {

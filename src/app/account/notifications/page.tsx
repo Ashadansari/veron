@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getCurrentSession } from "@/lib/authz";
 import { getCustomerOrderNotifications } from "@/lib/notifications/customer-notifications";
 
-export const metadata: Metadata = { title: "Order notifications | NajFancyStore" };
+export const metadata: Metadata = { title: "Order notifications | VÉRON" };
 export const dynamic = "force-dynamic";
 
 export default async function AccountNotificationsPage() {

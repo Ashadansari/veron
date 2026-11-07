@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LogoutButton } from "@/components/account-actions";
 import { AdminOrderAlerts } from "@/components/admin/admin-order-alerts";
+import { BrandLogo } from "@/components/brand-logo";
 
 const links = [
   { label: "Dashboard", href: "/admin", match: (path: string) => path === "/admin" },
@@ -19,13 +20,13 @@ export function AdminNavigation({ name, email }: { name: string; email: string }
   const path = usePathname();
   return <>
     <aside className="admin-sidebar">
-      <Link href="/admin" className="admin-brand">NajFancyStore<span>OPERATIONS</span></Link>
+      <BrandLogo href="/admin" label="VÉRON operations" className="admin-brand-logo" />
       <nav aria-label="Admin navigation">
         {links.map((link) => <Link key={link.href} href={link.href} aria-current={link.match(path) ? "page" : undefined} className={link.match(path) ? "admin-nav-link is-current" : "admin-nav-link"}>{link.label}</Link>)}
       </nav>
       <div className="admin-sidebar-user"><strong>{name}</strong><span>{email}</span><LogoutButton /></div>
     </aside>
-    <header className="admin-mobile-header"><Link href="/admin" className="admin-brand">NajFancyStore<span>ADMIN</span></Link><span className="admin-mobile-user">{name}</span><LogoutButton /></header>
+    <header className="admin-mobile-header"><BrandLogo href="/admin" label="VÉRON admin" className="admin-brand-logo" /><span className="admin-mobile-user">{name}</span><LogoutButton /></header>
     <nav aria-label="Admin mobile navigation" className="admin-mobile-nav">
       {links.map((link) => <Link key={link.href} href={link.href} aria-current={link.match(path) ? "page" : undefined}>{link.label}</Link>)}
     </nav>

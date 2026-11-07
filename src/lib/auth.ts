@@ -16,7 +16,7 @@ function createAuth(secret: string, baseURL: string) {
   const googleOAuth = getGoogleOAuthConfig();
   const trustedOrigins = [...new Set([baseURL, process.env.NEXT_PUBLIC_APP_URL].filter((origin): origin is string => Boolean(origin)))];
   return betterAuth({
-    appName: "Naj Fancy Store",
+    appName: "VÉRON",
     baseURL,
     secret,
     trustedOrigins,

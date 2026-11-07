@@ -12,7 +12,7 @@ import { formatNpr } from "@/lib/catalog/money";
 
 export default function ProductDetail({ product, related }: { product: CatalogProduct; related: CatalogProduct[] }) {
   const router = useRouter();
-  const { setValidatedItem } = useCart();
+  const { refreshCustomerCart } = useCart();
   const [imageIndex, setImageIndex] = useState(0);
   const [size, setSize] = useState(product.variants.find((v) => v.stock > 0)?.size ?? product.variants[0]?.size ?? "");
   const [color, setColor] = useState(product.variants.find((v) => v.stock > 0 && v.size === size)?.color ?? product.variants.find((v) => v.size === size)?.color ?? "");
@@ -26,8 +26,8 @@ export default function ProductDetail({ product, related }: { product: CatalogPr
   async function add(buyNow: boolean) {
     if (!selected) { setMessage("Choose an available size and color first."); return; }
     try {
-      const savedQuantity = await addToCustomerCart({ variantId: selected.id, quantity });
-      setValidatedItem(product, selected, savedQuantity);
+      await addToCustomerCart({ variantId: selected.id, quantity });
+      await refreshCustomerCart();
       setMessage("Added to your bag.");
       if (buyNow) router.push("/checkout");
     } catch (error) {

@@ -7,7 +7,7 @@ import { addresses, cartItems, carts, categories, inventory, notificationEvents,
 import { AuthorizationError } from "@/lib/authz";
 import { createCustomerOrder } from "@/lib/commerce/checkout";
 import { quoteShipping } from "@/lib/commerce/shipping";
-import { getCustomerCart, getCustomerOrder, getCustomerOrders } from "@/lib/commerce/customer-queries";
+import { getCustomerCart, getCustomerCartSnapshot, getCustomerOrder, getCustomerOrders } from "@/lib/commerce/customer-queries";
 import { cancelCustomerOrder, getAdminOrders, updateAdminOrderStatus } from "@/lib/commerce/order-management";
 import { listAdminOrderAlerts } from "@/lib/admin/order-alerts";
 import { recordNotificationEvent } from "@/lib/notifications/events";
@@ -90,6 +90,14 @@ test("checkout, orders, payment, inventory, and cancellation stay server-authori
       assert.deepEqual(unrecognizedCustomerCart.items, []);
       assert.equal(customerCart.subtotalPaisa, 199998n);
       assert.equal(secondCustomerCart.subtotalPaisa, 99999n);
+      const [customerSnapshot, secondSnapshot] = await Promise.all([
+        getCustomerCartSnapshot(customerId),
+        getCustomerCartSnapshot(secondCustomerId),
+      ]);
+      assert.deepEqual(customerSnapshot.items.map((item) => [item.variantId, item.quantity]), [[variantId, 2]]);
+      assert.deepEqual(secondSnapshot.items.map((item) => [item.variantId, item.quantity]), [[variantId, 1]]);
+      assert.equal(customerSnapshot.subtotalPaisa, "199998");
+      assert.equal(customerSnapshot.items[0]?.variant.pricePaisa, "99999");
     } finally {
       await db.delete(cartItems).where(inArray(cartItems.cartId, [customerCartId, secondCartId]));
       await db.delete(carts).where(inArray(carts.id, [customerCartId, secondCartId]));

@@ -1,6 +1,6 @@
 # Database and catalog
 
-NajFancyStore uses PostgreSQL with Prisma ORM 7.10.0 as the **only schema and migration authority**. Prisma's PostgreSQL driver adapter is configured in `src/lib/prisma.ts`. Drizzle remains a runtime query ORM for Better Auth, customer, and operations code; its table definitions map to the same physical tables but do not define a second migration history.
+VÉRON uses PostgreSQL with Prisma ORM 7.10.0 as the **only schema and migration authority**. Prisma's PostgreSQL driver adapter is configured in `src/lib/prisma.ts`. Drizzle remains a runtime query ORM for Better Auth, customer, and operations code; its table definitions map to the same physical tables but do not define a second migration history.
 
 ## Configuration
 

@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const product = await getCatalogProductBySlug(slug);
-  return product ? { title: `${product.name} | NajFancyStore`, description: product.description, openGraph: { title: product.name, description: product.description, images: [product.images[0]?.src] } } : { title: "Product not found | NajFancyStore" };
+  return product ? { title: product.name, description: product.description, openGraph: { title: product.name, description: product.description, images: [product.images[0]?.src] } } : { title: "Product not found" };
 }
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;

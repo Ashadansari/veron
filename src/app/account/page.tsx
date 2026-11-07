@@ -5,7 +5,7 @@ import { getDatabase } from "@/db";
 import { addresses, orders } from "@/db/schema";
 import { getCurrentSession } from "@/lib/authz";
 
-export const metadata: Metadata = { title: "Account | NajFancyStore" };
+export const metadata: Metadata = { title: "Account | VÉRON" };
 export const dynamic = "force-dynamic";
 
 export default async function AccountPage() {

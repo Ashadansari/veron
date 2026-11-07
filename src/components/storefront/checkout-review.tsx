@@ -15,7 +15,7 @@ export function CheckoutReview({ review }: { review: Review }) {
   const [message, setMessage] = useState("");
   const [pending, setPending] = useState(false);
   const router = useRouter();
-  const { clearCart } = useCart();
+  const { refreshCustomerCart } = useCart();
   const selected = review.addresses.find((address) => address.id === addressId);
   const unavailable = review.items.some((item) => !item.available);
   const shipping = selected?.shippingPaisa;
@@ -26,7 +26,9 @@ export function CheckoutReview({ review }: { review: Review }) {
     setPending(true); setMessage("");
     try {
       const result = await placeOrder({ addressId: selected.id, method: paymentMethod });
-      clearCart();
+      // The order action clears the database cart. Refresh the header/cart cache from that source
+      // before leaving checkout; a refresh failure must not imply that the order failed.
+      await refreshCustomerCart().catch(() => undefined);
       if (result.paymentMethod === "PROVIDER" && result.redirectUrl) {
         window.location.assign(result.redirectUrl);
         return;

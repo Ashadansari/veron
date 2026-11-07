@@ -26,10 +26,10 @@ export default async function Home() {
           />
           <div className="hero-overlay" />
           <div className="hero-content">
-            <span className="hero-kicker"><span /> A LITTLE MORE YOU</span>
-            <h1 id="hero-title">Made for your<br />kind of <em>everyday.</em></h1>
-            <p>Easy, expressive clothing for every version of you.</p>
-            <a className="button button-light" href="#shop">Find your favourite <ArrowIcon className="h-4 w-4" /></a>
+            <span className="hero-kicker"><span /> VÉRON · THE NEW COLLECTION</span>
+            <h1 id="hero-title">A signature<br />in <em>every detail.</em></h1>
+            <p>Elevated everyday and occasion wear for men and women.</p>
+            <a className="button button-light" href="#shop">Discover the collection <ArrowIcon className="h-4 w-4" /></a>
           </div>
           <span className="hero-index">01 <span /> 04</span>
           <span className="hero-side-note">THE NEW SEASON, YOUR WAY</span>
@@ -46,8 +46,8 @@ export default async function Home() {
         <section className="section-shell categories-section" id="categories">
           <div className="section-heading">
             <div>
-              <p className="eyebrow">A GOOD PLACE TO START</p>
-              <h2>What are you in the mood for?</h2>
+              <p className="eyebrow">CURATED FOR YOU</p>
+              <h2>Discover the collection</h2>
             </div>
             <Link className="text-link" href="/shop">See everything <ArrowIcon className="h-4 w-4" /></Link>
           </div>
@@ -68,8 +68,8 @@ export default async function Home() {
         <section className="section-shell products-section" id="shop">
           <div className="section-heading">
             <div>
-              <p className="eyebrow">YOUR NEXT LOVE, MAYBE?</p>
-              <h2>Good things, just in</h2>
+              <p className="eyebrow">THE VÉRON EDIT</p>
+              <h2>New season, timeless style.</h2>
             </div>
             <Link className="text-link" href="/shop">Shop the collection <ArrowIcon className="h-4 w-4" /></Link>
           </div>
@@ -79,10 +79,10 @@ export default async function Home() {
         <section className="story-panel" id="story">
           <div className="story-ornament" aria-hidden="true">✳</div>
           <div className="story-copy">
-            <p className="eyebrow">NOT JUST FOR THE BIG DAYS</p>
+            <p className="eyebrow">MADE TO BE YOURS</p>
             <h2>Wear what feels<br /><em>like you.</em></h2>
-            <p>Some days call for a little extra. Some days call for your favourite kurta and nowhere to be. We make room for all of them.</p>
-          <Link className="button button-dark" href="/shop">Explore the store <ArrowIcon className="h-4 w-4" /></Link>
+            <p>Thoughtful silhouettes, considered details, and timeless pieces for every version of your day.</p>
+          <Link className="button button-dark" href="/shop">Explore VÉRON <ArrowIcon className="h-4 w-4" /></Link>
           </div>
           <div className="story-image-wrap">
             <Image
@@ -99,10 +99,10 @@ export default async function Home() {
 
         <section className="newsletter-section">
           <span className="newsletter-spark">✳</span>
-          <p className="eyebrow">LETTERS FROM US</p>
-          <h2>Good things in your inbox.</h2>
-          <p>Store updates are coming soon.</p>
-          <Link className="text-link" href="/account">Account features are coming soon <ArrowIcon className="h-4 w-4" /></Link>
+          <p className="eyebrow">A NOTE FROM VÉRON</p>
+          <h2>Fashion. Style. You.</h2>
+          <p>Discover considered fashion for all the moments that matter.</p>
+          <Link className="text-link" href="/shop">Find your signature style <ArrowIcon className="h-4 w-4" /></Link>
         </section>
       </main>
       <SiteFooter />

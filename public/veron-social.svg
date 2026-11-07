@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#FFF8F0"/>
+  <path d="M0 0h18v630H0zM1182 0h18v630h-18z" fill="#650B20"/>
+  <circle cx="600" cy="245" r="125" fill="#3B0717"/>
+  <g fill="none" stroke="#D8AD65" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M588 171c0-16 24-19 24-3 0 10-10 13-10 22v10" stroke-width="5"/>
+    <path d="m602 203-81 56h162l-81-56Z" stroke-width="5"/>
+    <path d="m538 249 64 52 64-52" stroke-width="4"/>
+  </g>
+  <text x="600" y="465" text-anchor="middle" fill="#650B20" font-family="Georgia, 'Times New Roman', serif" font-size="90" letter-spacing="20">VÉRON</text>
+  <path d="M430 493h340" stroke="#D8AD65" stroke-width="2"/>
+  <text x="600" y="550" text-anchor="middle" fill="#3B0717" font-family="Arial, Helvetica, sans-serif" font-size="24" letter-spacing="7">FASHION. STYLE. YOU.</text>
+</svg>

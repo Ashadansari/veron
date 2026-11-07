@@ -1,15 +1,13 @@
 import Link from "next/link";
+import { BrandLogo } from "@/components/brand-logo";
 
 export function SiteFooter() {
   return (
     <footer className="site-footer">
       <div className="footer-main">
         <div className="footer-brand">
-          <Link className="brand-mark brand-mark-light" href="/" aria-label="Naj Fancy Store home">
-            <span className="brand-name">naj<span>fancy</span></span>
-            <span className="brand-caption">CLOTHING FOR NEPAL</span>
-          </Link>
-          <p>Clothes that feel like you.<br />Made for all the moments in between.</p>
+          <BrandLogo className="footer-brand-logo" variant="on-dark" />
+          <p>Fashion. Style. You.<br />Timeless pieces for every occasion.</p>
         </div>
         <div className="footer-column">
           <p className="footer-heading">Explore</p>
@@ -29,7 +27,7 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="footer-bottom">
-        <span>© 2026 Naj Fancy Store</span>
+        <span>© 2026 VÉRON</span>
         <span>Made with love, for Nepal</span>
         <a href="#top">Back to top ↑</a>
       </div>
