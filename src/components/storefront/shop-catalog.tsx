@@ -34,7 +34,7 @@ export default function ShopCatalog({ products, categories, initialQuery = "", i
   function resetFilters() { setQuery(""); setCategory(""); setMinPrice(""); setMaxPrice(""); setSort("recommended"); }
 
   return <main className="shop-page page-wrap">
-    <div className="shop-heading"><p className="eyebrow">THE NAJFANCY EDIT</p><h1>Pieces to make your own</h1><p>Considered clothing for every day, and every occasion.</p></div>
+    <div className="shop-heading"><p className="eyebrow">THE VÉRON EDIT</p><h1>Pieces to make your own</h1><p>Considered clothing for every day, and every occasion.</p></div>
     <section className="shop-tools" aria-label="Product filters">
       <label>Search products<input type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Try “kurta” or “festive”" /></label>
       <label>Category<select value={category} onChange={(e) => setCategory(e.target.value)}><option value="">All categories</option>{categories.map((item) => <option key={item.name}>{item.name}</option>)}</select></label>

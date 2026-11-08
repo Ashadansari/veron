@@ -17,7 +17,7 @@ export function SiteFooter() {
         </div>
         <div className="footer-column">
           <p className="footer-heading">We&apos;re here</p>
-          <a href="mailto:hello@najfancy.store">Contact us</a>
+          <a href="mailto:ashhadshamim2@gmail.com">Contact us</a>
           <Link href="/checkout">Shipping & delivery</Link>
           <Link href="/account/orders">My orders</Link>
         </div>
