@@ -55,3 +55,5 @@ Account deletion requires password confirmation and uses a transaction. The user
 - `npm run create-admin` is a local/operations CLI that prompts for credentials without echoing the password. It uses Better Auth's password hash format and checks normalized email under a PostgreSQL advisory lock. It never changes an existing ADMIN. An existing active CUSTOMER can only be recovered into the first ADMIN identity after the operator types `PROMOTE`; that transaction updates the same user's Better Auth credential and revokes existing sessions. `npm run admin:promote -- email@example.com` remains a separate trusted-operator command for deliberate additional administrator promotion.
 - `npm test` runs authentication and account integration tests against `TEST_DATABASE_URL`, which must point to a separate migrated PostgreSQL database. It does not use `DATABASE_URL` as a fallback.
 - `npm run lint`, `npm run typecheck`, and `npm run build` are available for validation.
+
+  X859ZN
